@@ -70,35 +70,35 @@ hosted first, or the avatar arrives broken — see "Before you send" below.
 
 ## Before you send: two things that will bite you
 
-**1. Host the images — this is not optional.** Both templates use *relative* paths (`assets/...`)
-so they preview correctly when you open them from disk. Relative paths only resolve when the HTML
-file sits next to its `assets/` folder. **In an inbox there is no "next to."** Not on your phone,
-not in Gmail, not anywhere. Mail the file to yourself as-is and every image arrives broken.
-
-There is no way around this. Base64 `data:` URIs are stripped by Gmail and Outlook; inline CID
-attachments only work if you send the mail programmatically, not if you paste into a compose
-window. The images must live on a public HTTPS host.
-
-Since you already have GitHub, the cheapest path is GitHub Pages:
-
-1. Push the `assets/` folder to a repo (a dedicated `email-assets` repo is tidiest).
-2. Settings → Pages → deploy from that branch.
-3. Your base URL becomes `https://creeperdiamonds.github.io/email-assets`.
-
-Then run the included script, which rewrites every reference and writes send-ready copies to
-`dist/` while leaving the originals previewable:
+**1. Images are hosted — already done.** Both templates now reference absolute URLs served by
+GitHub Pages from this repo:
 
 ```
-python host-assets.py https://creeperdiamonds.github.io/email-assets
+https://creeperdiamonds.github.io/creeperdiamonds-email/assets/<filename>
 ```
 
-It rewrites 33 references across both files — `src`, the `background` attribute, the inline
-`background-image`, and the Outlook VML `v:fill src`, which is easy to miss by hand. It refuses a
-non-HTTPS base, warns on any referenced file missing from disk, flags anything still relative, and
-prints a `curl` line per asset so you can confirm each returns 200 with an `image/*` content type
-before you send.
+That means they load anywhere — on your phone, in a forwarded copy, in any inbox. Relative paths
+would only have resolved when the HTML sat beside its `assets/` folder, which is never true in an
+inbox.
 
-Don't use `raw.githubusercontent.com` — it's rate-limited and GitHub discourages hotlinking it.
+Do **not** use `github.com/creeperdiamonds/creeperdiamonds-email/tree/main/assets/...` — that is
+GitHub's web UI page for a directory and returns HTML, so a mail client gets a webpage instead of
+a PNG. Only Pages (above) and `raw.githubusercontent.com` serve real image bytes; Pages is
+preferred because raw is rate-limited and GitHub discourages hotlinking it.
+
+`host-assets.py` switches where the images point, rewriting all 33 references in place across all
+four reference types — `src`, the `background` attribute, inline `background-image`, and the
+Outlook VML `v:fill src`, which is easy to miss by hand:
+
+```
+python host-assets.py            # show where they currently point
+python host-assets.py pages      # GitHub Pages (current)
+python host-assets.py raw        # raw.githubusercontent.com
+python host-assets.py local      # back to relative, for offline editing
+python host-assets.py https://your.cdn/path
+```
+
+It refuses a non-HTTPS base and warns if a referenced file is missing from `assets/`.
 
 Even correctly hosted, **many clients block remote images until the recipient clicks "show
 images."** That is expected, and it's why every textured surface carries a flat `bgcolor` fallback.

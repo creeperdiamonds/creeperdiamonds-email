@@ -1,66 +1,75 @@
 #!/usr/bin/env python3
 """
-Rewrite the templates' relative asset paths to absolute hosted URLs.
+Point the templates' image references at a hosted base URL.
 
-    python host-assets.py https://creeperdiamonds.github.io/email-assets
+    python host-assets.py                 # show where assets currently point
+    python host-assets.py pages           # GitHub Pages   (default, recommended)
+    python host-assets.py raw             # raw.githubusercontent.com
+    python host-assets.py local           # back to relative assets/ paths
+    python host-assets.py https://your.cdn/path
 
-Source files keep their relative paths so they stay previewable by opening them
-from disk. This writes send-ready copies into dist/ instead of editing in place.
+Rewrites in place. Handles all four reference types: src="", the background=""
+attribute, inline background-image:url(), and the Outlook VML <v:fill src>.
 
-Relative paths work only when the HTML sits next to its assets/ folder. In an
-inbox there is no "next to" - not on your phone, not anywhere. Every image
-reference has to be an absolute https:// URL served from a public host.
+Why not github.com/<user>/<repo>/tree/main/assets/ - that is GitHub's web UI
+page for a directory. It returns HTML, so a mail client fetching it gets a
+webpage instead of a PNG and the image breaks. Only the two forms below serve
+actual image bytes with an image/* content type.
 """
 import os, re, sys
 
+USER, REPO, BRANCH = 'creeperdiamonds', 'creeperdiamonds-email', 'main'
+PRESETS = {
+    'pages': f'https://{USER}.github.io/{REPO}/assets',
+    'raw':   f'https://raw.githubusercontent.com/{USER}/{REPO}/{BRANCH}/assets',
+    'local': 'assets',
+}
 FILES = ('creeperdiamonds-email.html', 'personal-note.html')
-OUT   = 'dist'
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+# any current base, relative or absolute, ending in a known asset filename
+REF = re.compile(r'(?:https?://[^\s"\')]*?/)?assets/([A-Za-z0-9._-]+\.(?:png|gif|jpg|jpeg))')
+
+def current():
+    for name in FILES:
+        s = open(os.path.join(HERE, name), encoding='utf-8').read()
+        bases = {m.group(0).rsplit('/', 1)[0] for m in REF.finditer(s)}
+        print(f'  {name}: {sorted(bases) or "no asset references"}')
 
 def main():
-    if len(sys.argv) != 2:
-        sys.exit(__doc__)
-    base = sys.argv[1].rstrip('/')
+    if len(sys.argv) == 1:
+        print('Assets currently point at:'); current()
+        print('\nPresets:')
+        for k, v in PRESETS.items(): print(f'  {k:6} -> {v}')
+        return
 
-    if not base.startswith('https://'):
-        sys.exit(f"Refusing: base must start with https://\n  got: {base}\n"
-                 "  Gmail proxies images over https and many clients refuse http.")
+    arg = sys.argv[1]
+    base = PRESETS.get(arg, arg).rstrip('/')
+    if base != 'assets' and not base.startswith('https://'):
+        sys.exit(f'Refusing: base must be https:// (or a preset)\n  got: {base}\n'
+                 '  Gmail proxies images over https and many clients refuse http.')
 
-    os.makedirs(OUT, exist_ok=True)
-    here = os.path.dirname(os.path.abspath(__file__))
+    on_disk = set(os.listdir(os.path.join(HERE, 'assets')))
     total = 0
-
     for name in FILES:
-        src = os.path.join(here, name)
-        if not os.path.exists(src):
-            print(f"  skip {name} (not found)"); continue
-        s = open(src, encoding='utf-8').read()
-
-        refs = set(re.findall(r'assets/[A-Za-z0-9._-]+', s))
-        for r in sorted(refs):
-            local = os.path.join(here, r)
-            if not os.path.exists(local):
-                print(f"  WARNING {name}: {r} referenced but missing on disk")
-            s = s.replace(r, f'{base}/{os.path.basename(r)}')
-
-        left = re.findall(r'(?:src|background)="(?!https?:|cid:|\{)[^"]+"', s)
-        left += re.findall(r"url\('(?!https?:)[^']+'\)", s)
-        if left:
-            print(f"  WARNING {name}: still relative -> {left}")
-
-        if 'placehold.co' in s:
-            print(f"  NOTE {name}: hero still points at placehold.co - swap in real key art")
-
-        dst = os.path.join(here, OUT, name)
-        open(dst, 'w', encoding='utf-8').write(s)
-        n = sum(s.count(f'{base}/{os.path.basename(r)}') for r in refs)
+        p = os.path.join(HERE, name)
+        s = open(p, encoding='utf-8').read()
+        missing = {m.group(1) for m in REF.finditer(s)} - on_disk
+        for f in sorted(missing):
+            print(f'  WARNING {name}: references {f}, not present in assets/')
+        s, n = REF.subn(lambda m: f'{base}/{m.group(1)}', s)
+        open(p, 'w', encoding='utf-8').write(s)
         total += n
-        print(f"  {name}: {len(refs)} asset(s), {n} reference(s) rewritten -> {OUT}/{name}")
+        print(f'  {name}: {n} reference(s) -> {base}/')
 
-    print(f"\nDone. {total} references now point at {base}/")
-    print("Upload everything in assets/ to that location, then send from dist/.")
-    print("\nSanity check before sending - each of these must return 200 and an image/* type:")
-    for f in sorted(os.listdir(os.path.join(here, 'assets'))):
-        print(f"  curl -sI {base}/{f} | head -1")
+    print(f'\nDone. {total} references rewritten in place.')
+    if base == 'assets':
+        print('Relative paths only resolve when the HTML sits beside assets/.')
+        print('They will NOT load in any inbox. Use "pages" before sending.')
+    else:
+        print('Verify each of these returns 200 with an image/* content type:')
+        for f in sorted(on_disk):
+            print(f'  curl -sI {base}/{f} | head -1')
 
 if __name__ == '__main__':
     main()
