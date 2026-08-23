@@ -117,7 +117,12 @@ Even correctly hosted, **many clients block remote images until the recipient cl
 images."** That is expected, and it's why every textured surface carries a flat `bgcolor` fallback.
 The email is designed to read properly with zero images loaded.
 
-The hero in the campaign template is still a `placehold.co` placeholder — swap in real key art.
+The campaign hero is real key art now: `assets/hero-keyart.jpg`, composed from the CapCut master.
+The master is square 1080×1080, so a straight crop to 1200×630 would have cut off either the
+character's head or the caption. Instead the artwork sits sharp and full-height in the centre, on
+a heavily blurred and darkened copy of itself scaled to fill the width, with the two vertical
+seams feathered so the centre panel doesn't look pasted on. JPEG at q78 — 79 KB, 8× smaller than
+the PNG, and it's photographic content so JPEG is the right format.
 
 **2. Do not hotlink the Google avatar URL.** The `lh3.googleusercontent.com/ogw/...` URL is a
 Google *account* avatar endpoint. Those tokens rotate, and when one does, every email you have
@@ -242,7 +247,9 @@ STUDIOS", so the same mark works for server sends and everything else.
 | File | Display | Bytes | Use |
 |---|---|---|---|
 | `assets/logo-animated.gif` | 52×52 | 133 KB | 160×160, 28 frames. **Wired in by default.** |
-| `assets/logo-mark.png` | 52×52 | 39 KB | Frame 1 as a still. Swap comment in the header. |
+| `assets/logo-mark.png` | 52×52 | 39 KB | Frame 1 as a still. Swap comment in either header. |
+| `assets/hero-keyart.jpg` | 600×315 | 79 KB | Campaign hero, 1200×630 source for retina. |
+| `assets/appealy-icon.png` | 40×40 | 3 KB | Appealy's own icon, from `brand/icon.svg` in its repo, rasterised because Gmail and Outlook strip SVG. |
 
 ### Timeline
 
