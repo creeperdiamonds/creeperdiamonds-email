@@ -29,8 +29,9 @@ way — don't hoist inline styles up into `<style>`.
 Tuned for business correspondence rather than a casual note:
 
 - **Linen surface, not facets** — see Textures below.
-- **Static logo mark**, not the animated GIF. An animated avatar reads as casual in a one-to-one
-  business email. `logo-animated.gif` is still there if you want it on a warmer note.
+- **Animated logo mark.** Outlook on Windows freezes GIFs on frame 1, and frame 1 is a full
+  legible composition, so it degrades to exactly the still. `logo-mark.png` is that still, left
+  commented in the file if you want to drop the 137 KB.
 - **The faceted stripe**, full-bleed under the letterhead — same seven segments and same palette
   as the campaign template, at 4px instead of 5px. Pure table cells, no image, so it renders
   identically everywhere including Outlook and with images blocked.
