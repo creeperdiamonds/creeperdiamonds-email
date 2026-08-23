@@ -22,9 +22,14 @@ anything promotional to a list, use the campaign template instead, which has the
 
 **It survives being pasted into Gmail or Outlook compose.** Those strip `<style>` blocks, so every
 colour, size and space that matters is set inline on the elements themselves. The `<style>` block
-holds only dark mode, the mobile media query, and client resets — nice to have, not load-bearing.
-Verified: no element depends on a class without an inline equivalent. If you edit it, keep it that
-way — don't hoist inline styles up into `<style>`.
+holds dark mode, the mobile media query, and client resets — nice to have, not load-bearing.
+If you edit it, keep it that way — don't hoist inline styles up into `<style>`.
+
+**One deliberate exception:** the Appealy icon is 120px, which on a 375px phone would squeeze the
+description into a ~120px column. `.sm-icon` / `.sm-icon-cell` shrink it to 64px under 600px wide,
+and those rules live only in `<style>`. In a normal send that works everywhere that supports media
+queries. If you paste into a compose window that strips `<style>`, the icon stays 120px on phones —
+still renders, just tight. Drop the icon to ~56px inline if you want it robust without the block.
 
 Tuned for business correspondence rather than a casual note:
 
@@ -249,7 +254,7 @@ STUDIOS", so the same mark works for server sends and everything else.
 | `assets/logo-animated.gif` | 52×52 | 133 KB | 160×160, 28 frames. **Wired in by default.** |
 | `assets/logo-mark.png` | 52×52 | 39 KB | Frame 1 as a still. Swap comment in either header. |
 | `assets/hero-keyart.jpg` | 600×315 | 79 KB | Campaign hero, 1200×630 source for retina. |
-| `assets/appealy-icon.png` | 40×40 | 3 KB | Appealy's own icon, from `brand/icon.svg` in its repo, rasterised because Gmail and Outlook strip SVG. |
+| `assets/appealy-icon.png` | 120×120 | 7 KB | Appealy's own icon, from `brand/icon.svg` in its repo, rasterised because Gmail and Outlook strip SVG. 240px source for retina; `border-radius:27px` matches the artwork's own 22.3% corner. |
 
 ### Timeline
 

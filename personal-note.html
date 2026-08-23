@@ -49,6 +49,10 @@
   @media only screen and (max-width:600px) {
     .sm-full { width:100% !important; max-width:100% !important; }
     .sm-px   { padding-left:26px !important; padding-right:26px !important; }
+    /* At 120px the icon crowds the description on a narrow screen. This is the one
+       piece of layout that is NOT also set inline - see the note below. */
+    .sm-icon      { width:64px !important; height:64px !important; border-radius:15px !important; }
+    .sm-icon-cell { width:64px !important; padding-right:0 !important; }
   }
 
   /* Re-asserts the dark palette against clients that auto-invert. Same values as inline. */
@@ -207,11 +211,11 @@
             <!-- Appealy's own icon, from brand/icon.svg in its repo. Rasterised to PNG because
                  Gmail and Outlook strip SVG entirely. Flattened onto #0B1120 - the block's fill -
                  so the rounded corners blend instead of showing an alpha fringe. -->
-            <td width="40" valign="top" style="width:40px; padding:18px 0 18px 18px;">
-              <img src="https://creeperdiamonds.github.io/creeperdiamonds-email/assets/appealy-icon.png" width="40" height="40" alt="Appealy" style="display:block; width:40px; height:40px; border-radius:9px;">
+            <td width="120" valign="top" class="sm-icon-cell" style="width:120px; padding:20px 0 20px 20px;">
+              <img src="https://creeperdiamonds.github.io/creeperdiamonds-email/assets/appealy-icon.png" width="120" height="120" alt="Appealy" class="sm-icon" style="display:block; width:120px; height:120px; border-radius:27px;">
             </td>
 
-            <td style="padding:17px 20px 18px 14px; font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+            <td valign="top" style="padding:20px 20px 20px 18px; font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
 
               <p style="margin:0 0 7px; font-size:10px; line-height:14px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase; color:#2DD4A7;">
                 Recommended product
