@@ -49,10 +49,6 @@
   @media only screen and (max-width:600px) {
     .sm-full { width:100% !important; max-width:100% !important; }
     .sm-px   { padding-left:26px !important; padding-right:26px !important; }
-    /* At 120px the icon crowds the description on a narrow screen. This is the one
-       piece of layout that is NOT also set inline - see the note below. */
-    .sm-icon      { width:64px !important; height:64px !important; border-radius:15px !important; }
-    .sm-icon-cell { width:64px !important; padding-right:0 !important; }
   }
 
   /* Re-asserts the dark palette against clients that auto-invert. Same values as inline. */
@@ -211,8 +207,8 @@
             <!-- Appealy's own icon, from brand/icon.svg in its repo. Rasterised to PNG because
                  Gmail and Outlook strip SVG entirely. Flattened onto #0B1120 - the block's fill -
                  so the rounded corners blend instead of showing an alpha fringe. -->
-            <td width="120" valign="top" class="sm-icon-cell" style="width:120px; padding:20px 0 20px 20px;">
-              <img src="https://creeperdiamonds.github.io/creeperdiamonds-email/assets/appealy-icon.png" width="120" height="120" alt="Appealy" class="sm-icon" style="display:block; width:120px; height:120px; border-radius:27px;">
+            <td width="56" valign="top" style="width:56px; padding:19px 0 19px 19px;">
+              <img src="https://creeperdiamonds.github.io/creeperdiamonds-email/assets/appealy-icon.png" width="56" height="56" alt="Appealy" style="display:block; width:56px; height:56px; border-radius:12px;">
             </td>
 
             <td valign="top" style="padding:20px 20px 20px 18px; font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
