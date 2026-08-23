@@ -100,6 +100,18 @@ python host-assets.py https://your.cdn/path
 
 It refuses a non-HTTPS base and warns if a referenced file is missing from `assets/`.
 
+### Preview on your phone
+
+Pages serves the templates themselves too, so you can open either one in a phone browser without
+sending anything:
+
+- https://creeperdiamonds.github.io/creeperdiamonds-email/personal-note.html
+- https://creeperdiamonds.github.io/creeperdiamonds-email/creeperdiamonds-email.html
+
+That is a browser preview, not an inbox preview — a real client will still strip the `<style>`
+block and may block the images. It is the fastest way to check layout and the animated mark on a
+real screen.
+
 Even correctly hosted, **many clients block remote images until the recipient clicks "show
 images."** That is expected, and it's why every textured surface carries a flat `bgcolor` fallback.
 The email is designed to read properly with zero images loaded.
