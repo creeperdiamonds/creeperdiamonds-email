@@ -158,32 +158,22 @@
       <td background="https://creeperdiamonds.github.io/creeperdiamonds-email/assets/bg-linen.png" bgcolor="#121A2B" class="sm-px dk-card" style="padding:32px 44px 8px; background-color:#121A2B; background-image:url('https://creeperdiamonds.github.io/creeperdiamonds-email/assets/bg-linen.png'); background-repeat:repeat; font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
 
         <p class="dk-t1" style="margin:0 0 22px; font-size:16px; line-height:26px; font-weight:600; color:#E9EEF9; mso-line-height-rule:exactly;">
-          Dear Jordan,
+          Hey {{ contact.FIRSTNAME|default:"there" }},
         </p>
-
-        <p class="dk-t2" style="margin:0 0 19px; font-size:15px; line-height:27px; color:#D3DBEA; mso-line-height-rule:exactly;">
-          Opening line goes here. Say who you are and why you are writing, in one sentence &mdash; if
-          someone has to read three paragraphs to find out what you want, they usually don't.
-        </p>
-
-        <p class="dk-t2" style="margin:0 0 19px; font-size:15px; line-height:27px; color:#D3DBEA; mso-line-height-rule:exactly;">
-          Middle paragraph. This is where the substance goes: the context, the ask, the thing you
-          are proposing. Two or three sentences beats a wall of text.
-        </p>
-
+          
         <p class="dk-t2" style="margin:0 0 30px; font-size:15px; line-height:27px; color:#D3DBEA; mso-line-height-rule:exactly;">
-          Close with one clear next step &mdash; a question they can answer, or a specific thing you
-          would like them to do. An inline link, should you need one, looks
-          <a href="https://example.com" style="color:#2DD4A7; font-weight:600; text-decoration:underline;">like this</a>.
+          {{ params.closing }}
+          <a href="{{ params.link_url }}" style="color:#2DD4A7; font-weight:600; text-decoration:underline;">{{ params.link_text }}</a>
+          {{ params.closing_after }}
         </p>
-
+          
         <p class="dk-t2" style="margin:0 0 26px; font-size:15px; line-height:27px; color:#D3DBEA; mso-line-height-rule:exactly;">
           Best regards,
         </p>
 
         <!-- ---- Signature block ---- -->
         <p class="dk-t1" style="margin:0 0 3px; font-size:15px; line-height:22px; font-weight:700; color:#E9EEF9;">
-          Yahav
+          creeper_diamonds
         </p>
         <p class="dk-t3" style="margin:0 0 30px; font-size:12px; line-height:19px; color:#94A2BC;">
           Founder &middot; Creeperdiamonds Studios
